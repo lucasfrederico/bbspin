@@ -2,6 +2,8 @@
 
 Turntable GIFs from Blockbench models, rendered in your browser.
 
+**Use it at [bbspin.lucasfrederico.dev](https://bbspin.lucasfrederico.dev). Nothing to install.**
+
 ![the sample bot spinning](docs/demo.gif)
 
 Model commissions and server showcases run on preview GIFs, and the usual way
@@ -15,6 +17,7 @@ that: drop the `.bbmodel`, tune the spin, download the GIF.
   transparent background
 - Exports a looping GIF encoded on the spot
 - A bundled sample model, in case you just want to poke at it
+- The UI speaks 11 languages and picks yours from the browser
 
 Everything is client-side. three.js renders, gifenc encodes, and the model
 never leaves your machine, which matters when the file is a paid commission.
