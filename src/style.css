@@ -200,6 +200,7 @@ body::before {
 
 .foot {
   display: flex;
+  align-items: center;
   justify-content: space-between;
   gap: 12px;
   margin-top: 26px;
@@ -211,6 +212,16 @@ body::before {
 }
 
 .foot a { color: var(--dim); text-decoration: none; }
+
+.foot select {
+  background: var(--bg);
+  color: var(--muted);
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  padding: 4px 8px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+}
 .foot a:hover { color: var(--accent); }
 
 @media (max-width: 760px) {

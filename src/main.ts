@@ -2,6 +2,7 @@ import { parseModel, ParseError } from './bbmodel/parse';
 import { buildModel, type BuiltModel } from './render/build';
 import { Stage, type StageOptions } from './render/stage';
 import { encodeTurntableGif } from './export/gif';
+import { t, getLang, setLang, LANG_NAMES, type Lang } from './i18n';
 
 const $ = <T extends HTMLElement>(id: string): T => {
   const el = document.getElementById(id);
@@ -27,6 +28,35 @@ const controls = {
   bg: $<HTMLInputElement>('bg'),
   transparent: $<HTMLInputElement>('transparent'),
 };
+
+function applyStrings(): void {
+  $('tagline').textContent = t('tagline');
+  $('drop-here').textContent = t('dropHere');
+  $('drop-or').textContent = t('or');
+  $('pick').textContent = t('chooseFile');
+  $('load-sample').textContent = t('loadSample');
+  $('l-size').textContent = t('size');
+  $('l-frames').textContent = t('frames');
+  $('l-duration').textContent = t('duration');
+  $('l-pitch').textContent = t('pitch');
+  $('l-bg').textContent = t('background');
+  $('l-transparent').textContent = t('transparent');
+  exportButton.textContent = t('exportGif');
+  document.documentElement.lang = getLang();
+}
+
+const langSelect = $<HTMLSelectElement>('lang');
+for (const [code, name] of Object.entries(LANG_NAMES)) {
+  const option = document.createElement('option');
+  option.value = code;
+  option.textContent = name;
+  langSelect.append(option);
+}
+langSelect.value = getLang();
+langSelect.addEventListener('change', () => {
+  setLang(langSelect.value as Lang);
+  applyStrings();
+});
 
 let stage: Stage | null = null;
 let built: BuiltModel | null = null;
@@ -61,7 +91,7 @@ async function loadText(text: string, sourceName: string): Promise<void> {
     say('');
   } catch (error) {
     const reason = error instanceof ParseError ? error.message : String(error);
-    say(`could not load ${sourceName}: ${reason}`, true);
+    say(t('loadFailed', { name: sourceName, reason }), true);
   }
 }
 
@@ -99,7 +129,7 @@ fileInput.addEventListener('change', () => {
 });
 
 $('load-sample').addEventListener('click', async () => {
-  say('loading sample…');
+  say(t('loadingSample'));
   const response = await fetch('/sample/bbspin-bot.bbmodel');
   await loadText(await response.text(), 'bbspin-bot.bbmodel');
 });
@@ -125,7 +155,7 @@ exportButton.addEventListener('click', async () => {
       frames: Number(controls.frames.value),
       durationMs: modelDuration,
       transparent: controls.transparent.checked,
-      onProgress: (done, total) => say(`encoding ${done}/${total}`),
+      onProgress: (done, total) => say(t('encoding', { done, total })),
     });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -133,7 +163,7 @@ exportButton.addEventListener('click', async () => {
     a.download = `${(modelName.textContent ?? 'model').split(' ·')[0]}-turntable.gif`;
     a.click();
     setTimeout(() => URL.revokeObjectURL(url), 2000);
-    say(`done, ${(blob.size / 1024 / 1024).toFixed(1)}MB`);
+    say(t('done', { size: (blob.size / 1024 / 1024).toFixed(1) }));
   } catch (error) {
     say(String(error), true);
   } finally {
@@ -142,3 +172,5 @@ exportButton.addEventListener('click', async () => {
     exportButton.disabled = false;
   }
 });
+
+applyStrings();
