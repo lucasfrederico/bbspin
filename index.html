@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>bbspin · turntable GIFs from Blockbench models</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header class="top">
+        <h1>bbspin</h1>
+        <p>
+          Drop a <code>.bbmodel</code>, get a spinning preview GIF. Everything
+          runs in your browser; the model never leaves your machine.
+        </p>
+      </header>
+
+      <section class="workbench">
+        <div class="stage-wrap" id="dropzone">
+          <canvas id="stage" width="512" height="512"></canvas>
+          <div class="drop-hint" id="drop-hint">
+            <strong>drop a .bbmodel here</strong>
+            <span>or</span>
+            <span>
+              <button type="button" id="pick">choose a file</button>
+              ·
+              <button type="button" id="load-sample">load the sample</button>
+            </span>
+          </div>
+          <input type="file" id="file" accept=".bbmodel,application/json" hidden />
+        </div>
+
+        <aside class="controls">
+          <label>
+            size
+            <select id="size">
+              <option value="256">256 px</option>
+              <option value="512" selected>512 px</option>
+              <option value="768">768 px</option>
+            </select>
+          </label>
+          <label>
+            frames
+            <select id="frames">
+              <option value="24">24</option>
+              <option value="36" selected>36</option>
+              <option value="60">60</option>
+            </select>
+          </label>
+          <label>
+            spin duration
+            <input type="range" id="duration" min="1000" max="6000" step="250" value="3000" />
+            <span id="duration-label">3.0s</span>
+          </label>
+          <label>
+            camera pitch
+            <input type="range" id="pitch" min="0" max="45" step="1" value="20" />
+            <span id="pitch-label">20°</span>
+          </label>
+          <label>
+            background
+            <input type="color" id="bg" value="#1b191f" />
+          </label>
+          <label class="check">
+            <input type="checkbox" id="transparent" />
+            transparent background
+          </label>
+          <button type="button" id="export" disabled>export gif</button>
+          <div class="status" id="status"></div>
+        </aside>
+      </section>
+
+      <footer class="foot">
+        <span id="model-name"></span>
+        <a href="https://github.com/lucasfrederico/bbspin" target="_blank" rel="noopener noreferrer">
+          github.com/lucasfrederico/bbspin
+        </a>
+      </footer>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
